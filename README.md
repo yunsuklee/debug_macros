@@ -69,7 +69,3 @@ Enhanced version of `println!` with debug information.
 ## License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
-## Repository
-
-[https://github.com/yunsuklee/debug_macros](https://github.com/yunsuklee/debug_macros)
