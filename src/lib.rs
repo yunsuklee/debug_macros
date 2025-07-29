@@ -7,7 +7,10 @@ macro_rules! debug_println {
             let thread_id = std::thread::current().id();
 
             #[cfg(unix)]
-            let ppid = unsafe { libc::getppid() as u32 };
+            let ppid = std::fs::read_to_string("/proc/self/stat")
+                .ok()
+                .and_then(|content| content.split_whitespace().nth(3)?.parse::<u32>().ok())
+                .unwrap_or(0);
             #[cfg(not(unix))]
             let ppid = 0;
 
@@ -30,7 +33,10 @@ macro_rules! debug_println {
             let thread_id = std::thread::current().id();
 
             #[cfg(unix)]
-            let ppid = unsafe { libc::getppid() as u32 };
+            let ppid = std::fs::read_to_string("/proc/self/stat")
+                .ok()
+                .and_then(|content| content.split_whitespace().nth(3)?.parse::<u32>().ok())
+                .unwrap_or(0);
             #[cfg(not(unix))]
             let ppid = 0;
 
