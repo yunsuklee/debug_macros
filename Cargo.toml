@@ -7,3 +7,6 @@ repository = "https://github.com/yunsuklee/debug_macros"
 license = "MIT"
 
 [dependencies]
+
+[target.'cfg(unix)'.dependencies]
+libc = "0.2"

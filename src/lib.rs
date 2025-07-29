@@ -5,7 +5,13 @@ macro_rules! debug_println {
         {
             let pid = std::process::id();
             let thread_id = std::thread::current().id();
-            println!("[PID: {} TID: {:?}]", pid, thread_id);
+
+            #[cfg(unix)]
+            let ppid = unsafe { libc::getppid() as u32 };
+            #[cfg(not(unix))]
+            let ppid = 0;
+
+            println!("[PID: {} PPID: {} TID: {:?}]", pid, ppid, thread_id);
             $(
                 let addr = &$arg as *const _ as usize;
                 println!("0x{:x} -> {:?}", addr, $arg);
@@ -22,7 +28,13 @@ macro_rules! debug_println {
         {
             let pid = std::process::id();
             let thread_id = std::thread::current().id();
-            println!("[PID: {} TID: {:?}]", pid, thread_id);
+
+            #[cfg(unix)]
+            let ppid = unsafe { libc::getppid() as u32 };
+            #[cfg(not(unix))]
+            let ppid = 0;
+
+            println!("[PID: {} PPID: {} TID: {:?}]", pid, ppid, thread_id);
             println!("{}", $fmt);
         }
         #[cfg(not(debug_assertions))]
