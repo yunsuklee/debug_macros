@@ -14,10 +14,11 @@ macro_rules! debug_println {
             #[cfg(not(unix))]
             let ppid = 0;
 
-            println!("[PID: {} PPID: {} TID: {:?}] {}", pid, ppid, thread_id);
+            println!("[PID: {} PPID: {} TID: {:?}]", pid, ppid, thread_id);
+            let formatted_msg = format!($fmt, $($arg),*);
             $(
                 let addr = &$arg as *const _ as usize;
-                println!("0x{:x} -> {}", addr, format!($fmt, $($arg),*));
+                println!("0x{:x} -> {}", addr, formatted_msg);
             )*
         }
         #[cfg(not(debug_assertions))]
