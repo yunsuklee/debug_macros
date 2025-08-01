@@ -11,15 +11,17 @@ macro_rules! debug_println {
                 .ok()
                 .and_then(|content| content.split_whitespace().nth(3)?.parse::<u32>().ok())
                 .unwrap_or(0);
+
             #[cfg(not(unix))]
             let ppid = 0;
 
-            println!("[PID: {} PPID: {} TID: {:?}]", pid, ppid, thread_id);
-            let formatted_msg = format!($fmt, $($arg),*);
+            println!("[ PID: {} PPID: {} TID: {:?} ]", pid, ppid, thread_id);
+            print!("[");
             $(
-                let addr = &$arg as *const _ as usize;
-                println!("0x{:x} -> {}", addr, formatted_msg);
+                print!(" {}@0x{:x}", stringify!($arg), &$arg as *const _ as usize);
             )*
+            println!(" ]");
+            println!($fmt, $($arg),*);
         }
         #[cfg(not(debug_assertions))]
         {
@@ -38,10 +40,11 @@ macro_rules! debug_println {
                 .ok()
                 .and_then(|content| content.split_whitespace().nth(3)?.parse::<u32>().ok())
                 .unwrap_or(0);
+
             #[cfg(not(unix))]
             let ppid = 0;
 
-            println!("[PID: {} PPID: {} TID: {:?}]", pid, ppid, thread_id);
+            println!("[ PID: {} PPID: {} TID: {:?} ]", pid, ppid, thread_id);
             println!("{}", $fmt);
         }
         #[cfg(not(debug_assertions))]
